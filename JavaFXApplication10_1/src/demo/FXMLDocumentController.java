@@ -72,8 +72,6 @@ public class FXMLDocumentController implements Initializable {
     private static int modPartInd;
     private static int modProductInd;
     
-    
-    
     public void updatePartTable()
     {
         partTable.setItems(getPartsInv());
@@ -92,7 +90,7 @@ public class FXMLDocumentController implements Initializable {
         return modProductInd;
     }
     
-    @FXML void PartSearch(ActionEvent event)
+    @FXML void PartSearchButtonPushed(ActionEvent event)
     {
         String SearchPartField = partFilterString.getText();
         int partsInd = -1;
@@ -114,15 +112,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    
-    @FXML void clearSearchPartTable(ActionEvent event) throws IOException
-    {
-        updatePartTable();
-        partFilterString.setText("");
-        
-    }
-    
-    @FXML void ProductSearch(ActionEvent event)
+    @FXML void ProductSearchButtonPushed(ActionEvent event)
     {
         String SearchProductField = productFilterString.getText();
         int productInd = -1;
@@ -143,16 +133,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    @FXML void clearSearchProductTable(ActionEvent event) throws IOException
-    {
-        updateProductTable();
-        productFilterString.setText("");
-    }
-    
-     
-     
-    
-    
      @Override
     public void initialize(URL url, ResourceBundle rb) {
          productID.setCellValueFactory(cellData -> cellData.getValue().prodIDProperty().asObject());
@@ -170,7 +150,7 @@ public class FXMLDocumentController implements Initializable {
     //button actions
     
     //PARTS BUTTONS
-    @FXML void addPartButtonPushed(ActionEvent Event)
+    @FXML void addPartButtonPushed(ActionEvent event)
     {
         try{
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("AddPart.fxml"));
@@ -247,15 +227,15 @@ public class FXMLDocumentController implements Initializable {
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
-    @FXML void modifyProductButtonPushed(ActionEvent Event)
+    @FXML void modifyProductButtonPushed(ActionEvent event)
     {
         ModifyProduct = productTable.getSelectionModel().getSelectedItem();
-        modProductInd = getProductsInv().indexOf(ModifyPart);
+        modProductInd = getProductsInv().indexOf(ModifyProduct);
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyProduct.fxml"));
             Parent root = (Parent) loader.load();
                     Stage stage = new Stage();
-                    stage.setTitle("Modify Product Window");
+                    stage.setTitle("Modify Part Window");
                     stage.setScene(new Scene(root));
                     stage.show();
         }
@@ -295,6 +275,17 @@ public class FXMLDocumentController implements Initializable {
         {
             System.out.println("Canceled");
         }
+    }
+    
+@FXML void clearPartsSearchButtonPushed(ActionEvent event) throws IOException
+    {
+        updatePartTable();
+        partFilterString.setText("");
+    }
+@FXML void clearProductsSearchButtonPushed(ActionEvent event) throws IOException
+    {
+        updateProductTable();
+        productFilterString.setText("");
     }
     
 }

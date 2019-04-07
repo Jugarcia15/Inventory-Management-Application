@@ -1,0 +1,21 @@
+*{
+dark-primary-color: #616161; 
+default-primary-color: #9E9E9E; 
+light-primary-color: #F5F5F5; 
+text-primary-color: #212121; 
+accent-color: #607D8B; 
+primary-text-color: #212121; 
+secondary-text-color: #757575; 
+divider-color: #BDBDBD; 
+}
+.root{
+    -fx-background-color: lightyellow;
+}
+.button{
+    -fx-font: 12px "Arial";
+    -fx-background-radius: 4;
+}
+
+.table-view .column-header{
+    -fx-font: 12px "Arial";
+}

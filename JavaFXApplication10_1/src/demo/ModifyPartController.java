@@ -5,17 +5,31 @@
  */
 package demo;
 
+import Classes.Inhouse;
+import Classes.Inventory;
+import static Classes.Inventory.getPartsInv;
+import Classes.Outsourced;
+import Classes.Part;
+import static demo.FXMLDocumentController.ModifyPartInd;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -29,155 +43,72 @@ public class ModifyPartController implements Initializable {
     @FXML private Button cancelButton;
     @FXML private RadioButton InHouseRadioButton;
     @FXML private RadioButton OutsourcedRadioButton;
-    private ToggleGroup sourceToggleGroup;
-    private FXMLDocumentController fxmlController;
-    private AddPartController apController;
     @FXML private TextField partIDTextField; 
     @FXML private TextField partNameTextField; 
     @FXML private TextField partInvTextField;
     @FXML private TextField partPCTextField;
     @FXML private TextField partMaxTextField;
     @FXML private TextField partMinTextField;
-    @FXML private TextField partCompanyNameTextField;
-    @FXML private TextField partMachineIDTextField; 
-    @FXML private Label partCompanyNameLabel, partMachineIDLabel;
-    private boolean inHouse;
-    public Button getSaveButton() {
-        return saveButton;
-    }
-
-    public void setSaveButton(Button saveButton) {
-        this.saveButton = saveButton;
-    }
-
-    public Button getCancelButton() {
-        return cancelButton;
-    }
-
-    public void setCancelButton(Button cancelButton) {
-        this.cancelButton = cancelButton;
-    }
-
-    public RadioButton getInHouseRadioButton() {
-        return InHouseRadioButton;
-    }
-
-    public void setInHouseRadioButton(RadioButton InHouseRadioButton) {
-        this.InHouseRadioButton = InHouseRadioButton;
-    }
-
-    public RadioButton getOutsourcedRadioButton() {
-        return OutsourcedRadioButton;
-    }
-
-    public void setOutsourcedRadioButton(RadioButton OutsourcedRadioButton) {
-        this.OutsourcedRadioButton = OutsourcedRadioButton;
-    }
-
-    public ToggleGroup getSourceToggleGroup() {
-        return sourceToggleGroup;
-    }
-
-    public void setSourceToggleGroup(ToggleGroup sourceToggleGroup) {
-        this.sourceToggleGroup = sourceToggleGroup;
-    }
-
-    public FXMLDocumentController getFxmlController() {
-        return fxmlController;
-    }
-
-    public void setFxmlController(FXMLDocumentController fxmlController) {
-        this.fxmlController = fxmlController;
-    }
-
-    public AddPartController getApController() {
-        return apController;
-    }
-
-    public void setApController(AddPartController apController) {
-        this.apController = apController;
-    }
-
-    public TextField getPartIDTextField() {
-        return partIDTextField;
-    }
-
-    public void setPartIDTextField(TextField partIDTextField) {
-        this.partIDTextField = partIDTextField;
-    }
-
-    public TextField getPartNameTextField() {
-        return partNameTextField;
-    }
-
-    public void setPartNameTextField(TextField partNameTextField) {
-        this.partNameTextField = partNameTextField;
-    }
-
-    public TextField getPartInvTextField() {
-        return partInvTextField;
-    }
-
-    public void setPartInvTextField(TextField partInvTextField) {
-        this.partInvTextField = partInvTextField;
-    }
-
-    public TextField getPartPCTextField() {
-        return partPCTextField;
-    }
-
-    public void setPartPCTextField(TextField partPCTextField) {
-        this.partPCTextField = partPCTextField;
-    }
-
-    public TextField getPartMaxTextField() {
-        return partMaxTextField;
-    }
-
-    public void setPartMaxTextField(TextField partMaxTextField) {
-        this.partMaxTextField = partMaxTextField;
-    }
-
-    public TextField getPartMinTextField() {
-        return partMinTextField;
-    }
-
-    public void setPartMinTextField(TextField partMinTextField) {
-        this.partMinTextField = partMinTextField;
-    }
-
-    public TextField getPartCompanyNameTextField() {
-        return partCompanyNameTextField;
-    }
-
-    public void setPartCompanyNameTextField(TextField partCompanyNameTextField) {
-        this.partCompanyNameTextField = partCompanyNameTextField;
-    }
-
-    public TextField getPartMachineIDTextField() {
-        return partMachineIDTextField;
-    }
-
-    public void setPartMachineIDTextField(TextField partMachineIDTextField) {
-        this.partMachineIDTextField = partMachineIDTextField;
-    }
-
-    public Label getPartCompanyNameLabel() {
-        return partCompanyNameLabel;
-    }
-
-    public void setPartCompanyNameLabel(Label partCompanyNameLabel) {
-        this.partCompanyNameLabel = partCompanyNameLabel;
-    }
-
-    public Label getPartMachineIDLabel() {
-        return partMachineIDLabel;
-    }
-
-    public void setPartMachineIDLabel(Label partMachineIDLabel) {
-        this.partMachineIDLabel = partMachineIDLabel;
-    }
+    @FXML private TextField partCompanyNameMachineIDTextField; 
+    @FXML private Label partCompanyNameMachineIDLabel;
+    private ToggleGroup sourceToggleGroup;
+    private boolean isPartOutsourced;
+    int modifyPartIndex = ModifyPartInd();
+    private String errorMessage = new String();
+    private int partID;
     
+    @FXML void modifyProductSaveButtonPushed(ActionEvent event) throws IOException
+    {
+        String partName = partNameTextField.getText();
+        String partInv = partInvTextField.getText();
+        String partPrice = partPCTextField.getText();
+        String partMin = partMinTextField.getText();
+        String partMax = partMaxTextField.getText();
+        String partDyn = partCompanyNameMachineIDTextField.getText();
+        try {
+            errorMessage = Part.isPartValid(partName, Integer.parseInt(partMin), Integer.parseInt(partMax), Integer.parseInt(partInv), Double.parseDouble(partPrice), errorMessage);
+            if (errorMessage.length() > 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error Adding Part");
+                alert.setHeaderText("Error!");
+                alert.setContentText(errorMessage);
+                alert.showAndWait();
+            } else {
+                if (isPartOutsourced == false) {
+                    Inhouse tempInHousePart = new Inhouse();
+                    tempInHousePart.setPartID(partID);
+                    tempInHousePart.setPartName(partName);
+                    tempInHousePart.setPartPC(Double.parseDouble(partPrice));
+                    tempInHousePart.setPartLevel(Integer.parseInt(partInv));
+                    tempInHousePart.setPartMin(Integer.parseInt(partMin));
+                    tempInHousePart.setPartMax(Integer.parseInt(partMax));
+                    tempInHousePart.setpartMachineID(Integer.parseInt(partDyn));
+                    Inventory.updatePart(modifyPartIndex, tempInHousePart);
+                } else {
+                    Outsourced tempOutsourcedPart = new Outsourced();
+                    tempOutsourcedPart.setPartID(partID);
+                    tempOutsourcedPart.setPartName(partName);
+                    tempOutsourcedPart.setPartPC(Double.parseDouble(partPrice));
+                    tempOutsourcedPart.setPartLevel(Integer.parseInt(partInv));
+                    tempOutsourcedPart.setPartMin(Integer.parseInt(partMin));
+                    tempOutsourcedPart.setPartMax(Integer.parseInt(partMax));
+                    tempOutsourcedPart.setPartCompanyName(partDyn);
+                    Inventory.updatePart(modifyPartIndex, tempOutsourcedPart);
+                }
+
+                final Node source = (Node) event.getSource();
+                final Stage stage = (Stage) source.getScene().getWindow();
+                stage.close(); 
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Blank Fields");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error Adding Part!");
+            alert.setHeaderText("Error");
+            alert.setContentText("Form contains blank field.");
+            alert.showAndWait();
+        }
+    }
     
     
     /**
@@ -186,27 +117,60 @@ public class ModifyPartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        sourceToggleGroup = new ToggleGroup();
+        
+        Part part = getPartsInv().get(modifyPartIndex);
+        partID = getPartsInv().get(modifyPartIndex).getPartID();
+        partIDTextField.setText("Part ID: " + partID);
+        partNameTextField.setText(part.getPartName());
+        partInvTextField.setText(Integer.toString(part.getPartLevel()));
+        partPCTextField.setText(Double.toString(part.getPartPC()));
+        partMinTextField.setText(Integer.toString(part.getPartMin()));
+        partMaxTextField.setText(Integer.toString(part.getPartMax()));
+        if(part instanceof Inhouse)
+        {
+            partCompanyNameMachineIDTextField.setText(Integer.toString(((Inhouse) getPartsInv().get(modifyPartIndex)).getpartMachineID()));   
+            partCompanyNameMachineIDLabel.setText("Machine ID");
+            InHouseRadioButton.setSelected(true);
+        }
+        else
+        {
+            partCompanyNameMachineIDTextField.setText(((Outsourced) getPartsInv().get(modifyPartIndex)).getPartCompanyName());   
+            partCompanyNameMachineIDLabel.setText("Company Name");
+            OutsourcedRadioButton.setSelected(true);
+        }
+    sourceToggleGroup = new ToggleGroup();
         this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
-        this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);
+        this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);   
     }    
     @FXML void outsourcedButtonPushed(ActionEvent event)
     {
-        inHouse = false;
-        partMachineIDLabel.setText("Company Name");
+        isPartOutsourced = true;
+        partCompanyNameMachineIDLabel.setText("Company Name");
         
     }
     @FXML void inhouseButtonPushed(ActionEvent event)
     {
-        inHouse = true;
-        partMachineIDLabel.setText("MachineID");
+        isPartOutsourced = false;
+        partCompanyNameMachineIDLabel.setText("MachineID");
     }
     
     @FXML void cancelButtonPushed(ActionEvent event)
     {
-        final Node source = (Node) event.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+        Alert exit = new Alert(Alert.AlertType.CONFIRMATION);
+        exit.initModality(Modality.NONE);
+        exit.setContentText("Are you sure you want to cancel" +partNameTextField.getText()+"?");
+        Optional<ButtonType> Cancel = exit.showAndWait();
+        if(Cancel.get() == ButtonType.OK)
+                {
+                    final Node source = (Node) event.getSource();
+                    final Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
+                }
+        else
+        {
+            System.out.println("Cancel has been clicked.");
+        }
+        
     }
     
 }
