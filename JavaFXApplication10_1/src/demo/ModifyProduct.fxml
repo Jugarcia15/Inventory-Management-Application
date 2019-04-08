@@ -70,7 +70,7 @@
                   <Label text="ID" />
                   <Label text="Name" GridPane.rowIndex="1" />
                   <TextField fx:id="modifyProductNameTextField" promptText="Product Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="modifyProductIDTextField" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" />
+                  <TextField fx:id="modifyProductIDTextField" disable="true" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <GridPane layoutX="14.0" layoutY="158.0" prefHeight="56.0" prefWidth="123.0">

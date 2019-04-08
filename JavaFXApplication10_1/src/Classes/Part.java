@@ -16,7 +16,9 @@ import javafx.beans.property.StringProperty;
  *
  * @author Juan G
  */
-public class Part {    
+
+//fixed Five expected classes that match the UML specification are present. The Part class is not abstract.
+public abstract class Part {    
     private StringProperty PartName;
     private IntegerProperty partID;
     private IntegerProperty partLevel;

@@ -58,6 +58,18 @@ public class ModifyPartController implements Initializable {
     private String errorMessage = new String();
     private int partID;
     
+    @FXML void outsourcedButtonPushed(ActionEvent event)
+    {
+        isPartOutsourced = true;
+        partCompanyNameMachineIDLabel.setText("Company Name");
+        
+    }
+    @FXML void inhouseButtonPushed(ActionEvent event)
+    {
+        isPartOutsourced = false;
+        partCompanyNameMachineIDLabel.setText("MachineID");
+    }
+    
     @FXML void modifyProductSaveButtonPushed(ActionEvent event) throws IOException
     {
         //•  save modifications to the data and then redirect to the main screen
@@ -86,7 +98,8 @@ public class ModifyPartController implements Initializable {
                     tempInHousePart.setPartMax(Integer.parseInt(partMax));
                     tempInHousePart.setpartMachineID(Integer.parseInt(partDyn));
                     Inventory.updatePart(modifyPartIndex, tempInHousePart);
-                } else {
+                } 
+                else {
                     Outsourced tempOutsourcedPart = new Outsourced();
                     tempOutsourcedPart.setPartID(partID);
                     tempOutsourcedPart.setPartName(partName);
@@ -96,66 +109,25 @@ public class ModifyPartController implements Initializable {
                     tempOutsourcedPart.setPartMax(Integer.parseInt(partMax));
                     tempOutsourcedPart.setPartCompanyName(partDyn);
                     Inventory.updatePart(modifyPartIndex, tempOutsourcedPart);
-                }
+                    }
 
                 final Node source = (Node) event.getSource();
                 final Stage stage = (Stage) source.getScene().getWindow();
                 stage.close(); 
             }
-        } catch (NumberFormatException e) {
-            System.out.println("Blank Fields");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error Adding Part!");
-            alert.setHeaderText("Error");
-            alert.setContentText("Form contains blank field.");
-            alert.showAndWait();
+        } 
+            catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error Modifying Part");
+                alert.setContentText("Form contains blank fields.");
+                alert.showAndWait();
         }
     }
     
     
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        //•  modify or change data values
-        Part part = getPartsInv().get(modifyPartIndex);
-        partID = getPartsInv().get(modifyPartIndex).getPartID();
-        partIDTextField.setText("Part ID: " + partID);
-        partNameTextField.setText(part.getPartName());
-        partInvTextField.setText(Integer.toString(part.getPartLevel()));
-        partPCTextField.setText(Double.toString(part.getPartPC()));
-        partMinTextField.setText(Integer.toString(part.getPartMin()));
-        partMaxTextField.setText(Integer.toString(part.getPartMax()));
-        if(part instanceof Inhouse)
-        {
-            partCompanyNameMachineIDTextField.setText(Integer.toString(((Inhouse) getPartsInv().get(modifyPartIndex)).getpartMachineID()));   
-            partCompanyNameMachineIDLabel.setText("Machine ID");
-            InHouseRadioButton.setSelected(true);
-        }
-        else
-        {
-            partCompanyNameMachineIDTextField.setText(((Outsourced) getPartsInv().get(modifyPartIndex)).getPartCompanyName());   
-            partCompanyNameMachineIDLabel.setText("Company Name");
-            OutsourcedRadioButton.setSelected(true);
-        }
-        //•  select “In-House” or “Outsourced”
-        sourceToggleGroup = new ToggleGroup();
-        this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
-        this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);   
-    }    
-    @FXML void outsourcedButtonPushed(ActionEvent event)
-    {
-        isPartOutsourced = true;
-        partCompanyNameMachineIDLabel.setText("Company Name");
         
-    }
-    @FXML void inhouseButtonPushed(ActionEvent event)
-    {
-        isPartOutsourced = false;
-        partCompanyNameMachineIDLabel.setText("MachineID");
-    }
+    
     
     //•  cancel or exit out of this screen and go back to the main screen
     @FXML void cancelButtonPushed(ActionEvent event)
@@ -176,5 +148,44 @@ public class ModifyPartController implements Initializable {
         }
         
     }
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        //•  modify or change data values
+        //•  select “In-House” or “Outsourced”
+        sourceToggleGroup = new ToggleGroup();
+        this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
+        this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);
+        
+        Part part = getPartsInv().get(modifyPartIndex);
+        partID = getPartsInv().get(modifyPartIndex).getPartID();
+        
+        partIDTextField.setText("Part ID: " + partID);
+        partNameTextField.setText(part.getPartName());
+        partInvTextField.setText(Integer.toString(part.getPartLevel()));
+        partPCTextField.setText(Double.toString(part.getPartPC()));
+        partMinTextField.setText(Integer.toString(part.getPartMin()));
+        partMaxTextField.setText(Integer.toString(part.getPartMax()));
+        
+        
+        if(part instanceof Inhouse)
+        {
+            partCompanyNameMachineIDTextField.setText(Integer.toString(((Inhouse) getPartsInv().get(modifyPartIndex)).getpartMachineID()));   
+            partCompanyNameMachineIDLabel.setText("Machine ID");
+            InHouseRadioButton.setSelected(true);
+        }
+        else
+        {
+            partCompanyNameMachineIDTextField.setText(((Outsourced) getPartsInv().get(modifyPartIndex)).getPartCompanyName());   
+            partCompanyNameMachineIDLabel.setText("Company Name");
+            OutsourcedRadioButton.setSelected(true);
+        }
+           
+    }
+    
+    
     
 }

@@ -199,7 +199,7 @@ public class ModifyProductController implements Initializable {
         modifyProductMinTextField.setText(Integer.toString(products.getprodMin()));
         modifyProductMaxTextField.setText(Integer.toString(products.getprodMax()));
         modifyProductIDTextField.setText("Auto Gen:"+ productID);
-        
+        cParts = products.getProductParts();
         modifyProductIDColumn.setCellValueFactory(cellData -> cellData.getValue().partIDProperty().asObject());
         modifyProductNameColumn.setCellValueFactory(cellData -> cellData.getValue().partNameProperty());
         modifyProductLevelColumn.setCellValueFactory(cellData -> cellData.getValue().partLevelProperty().asObject());

@@ -30,7 +30,7 @@ public class Inventory {
             Integer.parseInt(input);
             return true;
         }
-        catch(Exception ex)
+        catch(Exception e)
         {
             return false;
         }
@@ -81,20 +81,6 @@ public class Inventory {
         }
         return found;
     }
-//    public static boolean validateProductDelete(Product product)
-//    
-//    {
-//        boolean found = false;
-//        int productID = product.getprodID();
-//        for (int i=0; i < productsInv.size(); i++) {
-//            if (productsInv.get(i).getprodID() == productID) {
-//                if (!productsInv.get(i).getProductParts().isEmpty()) {
-//                    found = true;
-//                }
-//            }
-//        }
-//        return found;
-//    }
     
     //search for a part or product and display matching results
     public static int SearchPart(String searchField)

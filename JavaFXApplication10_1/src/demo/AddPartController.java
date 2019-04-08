@@ -54,10 +54,24 @@ public class AddPartController implements Initializable {
     
     @FXML private Label partMachineIDLabel;
 
-    Part selectedPart;
-    Boolean isPartOutsourced = true;
+    private boolean isPartOutsourced;
     private int partID;
     private String ErrorMessage = new String();
+    
+    
+    //radio buttons
+    //•  select “In-House” or “Outsourced”
+    @FXML void outsourcedButtonPushed(ActionEvent event)
+    {
+        isPartOutsourced = true;
+        partMachineIDLabel.setText("Company Name");
+        
+    }
+    @FXML void inhouseButtonPushed(ActionEvent event)
+    {
+        isPartOutsourced = false;
+        partMachineIDLabel.setText("Machine ID");
+    }
     
     //•  enter name, inventory level, price, max and min values, and company name or machine ID
     //•  save the data and then redirect to the main screen    
@@ -141,26 +155,16 @@ public class AddPartController implements Initializable {
     }
     
     
-    //radio buttons
-    //•  select “In-House” or “Outsourced”
-    @FXML void outsourcedButtonPushed(ActionEvent event)
-    {
-        isPartOutsourced = true;
-        partMachineIDLabel.setText("Company Name");
-        
-    }
-    @FXML void inhouseButtonPushed(ActionEvent event)
-    {
-        isPartOutsourced = false;
-        partMachineIDLabel.setText("Machine ID");
-    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         //configure radiobuttons •  select “In-House” or “Outsourced”
+        //Fixed The Inhouse/Outsourced option can be saved without selecting a radio button option.
         sourceToggleGroup = new ToggleGroup();
-        this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
-        this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);
+        InHouseRadioButton.setToggleGroup(sourceToggleGroup);
+        OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);
+        InHouseRadioButton.setSelected(true);
+        isPartOutsourced = false;
         partID = Inventory.getPartIDCT();
         partIDTextField.setText("AUTO GEN:" + partID);
     }
