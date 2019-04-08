@@ -53,17 +53,19 @@ import javafx.stage.Modality;
  * @author Juan G
  */
 public class FXMLDocumentController implements Initializable {
+    //•  lists for parts
     @FXML TableView<Part> partTable;
     @FXML TableColumn<Part, Integer> partLevel;
     @FXML TableColumn<Part, Integer> partID;
     @FXML TableColumn<Part, String> partName;
     @FXML TableColumn<Part, Double> partCost;
-    
+    //•  lists for products
     @FXML TableView<Product> productTable;
     @FXML TableColumn<Product, Integer> productLevel;
     @FXML TableColumn<Product,Integer> productID;
     @FXML TableColumn<Product, String> productName;
     @FXML TableColumn<Product, Double> productCost;
+    
     @FXML TextField partFilterString;
     @FXML TextField productFilterString;
     
@@ -76,6 +78,7 @@ public class FXMLDocumentController implements Initializable {
     {
         partTable.setItems(getPartsInv());
     }
+    
     public void updateProductTable()
     {
         productTable.setItems(getProductsInv());
@@ -85,11 +88,13 @@ public class FXMLDocumentController implements Initializable {
     {
         return modPartInd;
     }
+    
     public static int ModifyProductInd()
     {
         return modProductInd;
     }
     
+    //•  search for a part or product and display matching results
     @FXML void PartSearchButtonPushed(ActionEvent event)
     {
         String SearchPartField = partFilterString.getText();
@@ -99,7 +104,7 @@ public class FXMLDocumentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Search Error");
             alert.setHeaderText("Part not found");
-            alert.setContentText("Term does not match any parts");
+            alert.setContentText("Search term does not match any parts");
             alert.showAndWait();
         }
         else{
@@ -111,7 +116,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    
+    //•  search for a part or product and display matching results
     @FXML void ProductSearchButtonPushed(ActionEvent event)
     {
         String SearchProductField = productFilterString.getText();
@@ -121,7 +126,7 @@ public class FXMLDocumentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Search Error");
             alert.setHeaderText("Product not found");
-            alert.setContentText("Term does not match any product");
+            alert.setContentText("Search term does not match any product");
             alert.showAndWait(); 
         }
         else{
@@ -149,7 +154,7 @@ public class FXMLDocumentController implements Initializable {
     }
     //button actions
     
-    //PARTS BUTTONS
+    //redirect to add part screen
     @FXML void addPartButtonPushed(ActionEvent event)
     {
         try{
@@ -166,7 +171,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    
+    //redirect to modify part screen
     @FXML void modifyPartButtonPushed(ActionEvent Event)
     {
         ModifyPart = partTable.getSelectionModel().getSelectedItem();
@@ -184,6 +189,7 @@ public class FXMLDocumentController implements Initializable {
     }
     }
     
+    //•  delete a selected part or product from the list
     @FXML void deletePartButtonPushed(ActionEvent event) throws IOException
     {
         Part temp = partTable.getSelectionModel().getSelectedItem();
@@ -212,14 +218,14 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    //PRODUCT BUTTONS
+    //redirect to add product screen
     @FXML void addProductButtonPushed(ActionEvent event) throws IOException
     {
         try{
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("AddProduct.fxml"));
                     Parent root = (Parent) loader.load();
                     Stage stage = new Stage();
-                    stage.setTitle("Add Part Window");
+                    stage.setTitle("Add Product Window");
                     stage.setScene(new Scene(root));
                     stage.show();
         }
@@ -227,6 +233,8 @@ public class FXMLDocumentController implements Initializable {
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
+
+    //redirect to modify product screen    
     @FXML void modifyProductButtonPushed(ActionEvent event)
     {
         ModifyProduct = productTable.getSelectionModel().getSelectedItem();
@@ -243,6 +251,8 @@ public class FXMLDocumentController implements Initializable {
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
     }
     }
+    
+    //•  delete a selected part or product from the list
     @FXML void deleteProductButtonPushed(ActionEvent event)
     {
         Product temp = productTable.getSelectionModel().getSelectedItem();
@@ -261,7 +271,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    //EXIT BUTTON
+    //•  exit the main screen
     @FXML void exitButtonPushed(ActionEvent event)
     {
         Alert exit = new Alert(Alert.AlertType.CONFIRMATION);
@@ -282,6 +292,7 @@ public class FXMLDocumentController implements Initializable {
         updatePartTable();
         partFilterString.setText("");
     }
+
 @FXML void clearProductsSearchButtonPushed(ActionEvent event) throws IOException
     {
         updateProductTable();

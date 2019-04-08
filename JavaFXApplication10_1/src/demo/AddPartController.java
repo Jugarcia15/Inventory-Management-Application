@@ -39,12 +39,11 @@ import javafx.stage.Stage;
  */
 public class AddPartController implements Initializable {
 
-    //RadioButton and toggle
+    //RadioButton and toggle for Inhouse and outsourced
     @FXML private RadioButton InHouseRadioButton;
     @FXML private RadioButton OutsourcedRadioButton;
     private ToggleGroup sourceToggleGroup;
-    private FXMLDocumentController fxmlController;
-    private AddPartController apController;
+    
     @FXML private TextField partIDTextField; 
     @FXML private TextField partNameTextField; 
     @FXML private TextField partInvTextField;
@@ -52,15 +51,16 @@ public class AddPartController implements Initializable {
     @FXML private TextField partMaxTextField;
     @FXML private TextField partMinTextField;
     @FXML private TextField partMachineIDCompanyNameTextField;
-    @FXML private Label partCompanyNameLabel, partMachineIDLabel;
-    //Buttons
-    @FXML private Button saveButton;
-    @FXML private Button cancelButton;
+    
+    @FXML private Label partMachineIDLabel;
+
     Part selectedPart;
     Boolean isPartOutsourced = true;
     private int partID;
     private String ErrorMessage = new String();
     
+    //•  enter name, inventory level, price, max and min values, and company name or machine ID
+    //•  save the data and then redirect to the main screen    
     @FXML void addButtonPushed(ActionEvent event) throws IOException
     {
         String partName = partNameTextField.getText();
@@ -75,7 +75,7 @@ public class AddPartController implements Initializable {
             if(ErrorMessage.length()>0)
             {
                 Alert simpleAlert = new Alert(AlertType.INFORMATION);
-                simpleAlert.setTitle("Error when adding part.");
+                simpleAlert.setTitle("Error when attempting to add part.");
                 simpleAlert.setTitle("Error, please review");
                 simpleAlert.setContentText(ErrorMessage);
                 simpleAlert.showAndWait();
@@ -104,11 +104,7 @@ public class AddPartController implements Initializable {
                     outPart.setPartMax(Integer.parseInt(partMax));
                     outPart.setPartMin(Integer.parseInt(partMin));
                     outPart.setPartCompanyName(partMachineIDCompanyName);
-                    Inventory.addPart(outPart);
-                    
-                    
-                    
-                    
+                    Inventory.addPart(outPart);  
                 }
                 final Node source = (Node) event.getSource();
                 final Stage stage = (Stage) source.getScene().getWindow();
@@ -124,13 +120,12 @@ public class AddPartController implements Initializable {
         }
     }   
     
-    
-    //cancel alert and confirmation
+    //•  cancel or exit out of this screen and go back to the main screen
     @FXML void cancelButtonPushed(ActionEvent event)
     {
         Alert exit = new Alert(AlertType.CONFIRMATION);
         exit.initModality(Modality.NONE);
-        exit.setContentText("Are you sure you want to delete part" +partNameTextField.getText()+"?");
+        exit.setContentText("Are you sure you want to cancel adding " +partNameTextField.getText()+"?");
         Optional<ButtonType> Cancel = exit.showAndWait();
         if(Cancel.get() == ButtonType.OK)
                 {
@@ -140,13 +135,14 @@ public class AddPartController implements Initializable {
                 }
         else
         {
-            System.out.println("Cancel has been clicked.");
+            System.out.println("Canceled.");
         }
         
     }
     
     
     //radio buttons
+    //•  select “In-House” or “Outsourced”
     @FXML void outsourcedButtonPushed(ActionEvent event)
     {
         isPartOutsourced = true;
@@ -161,7 +157,7 @@ public class AddPartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        //configure radiobuttons
+        //configure radiobuttons •  select “In-House” or “Outsourced”
         sourceToggleGroup = new ToggleGroup();
         this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
         this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);

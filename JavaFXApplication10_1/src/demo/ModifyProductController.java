@@ -37,11 +37,6 @@ import javafx.stage.Stage;
  */
 public class ModifyProductController implements Initializable {
 
-    private ObservableList<Part> cParts = FXCollections.observableArrayList();
-    private String errorMessage = new String();
-    private int productID;
-    private int modifyProductIndex = ModifyProductInd();
-
     @FXML private TextField modifyProductIDTextField;
     @FXML private TextField modifyProductNameTextField;
     @FXML private TextField modifyProductPCTextField;
@@ -64,6 +59,12 @@ public class ModifyProductController implements Initializable {
 
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
+    
+    
+    private ObservableList<Part> cParts = FXCollections.observableArrayList();
+    private String errorMessage = new String();
+    private int productID;
+    private int modifyProductIndex = ModifyProductInd();
     /**
      * Initializes the controller class.
      */
@@ -90,11 +91,13 @@ public class ModifyProductController implements Initializable {
     }
     
     @FXML void modifyAddProductButtonPushed(ActionEvent event) {
+        //•  associate one or more parts with a product
         Part part = modifyProductTableView.getSelectionModel().getSelectedItem();
         cParts.add(part);
         updateProductCurrentTableView();
     }
     
+    //•  remove or disassociate a part from a product
     @FXML void modifyProductDeleteButtonPushed(ActionEvent event) 
     {
         Part part = modifyProductCurrentTableView.getSelectionModel().getSelectedItem();
@@ -109,12 +112,12 @@ public class ModifyProductController implements Initializable {
         if (result.get() == ButtonType.OK) {
             cParts.remove(part);
         } else {
-            System.out.println("Cancel clicked.");
+            System.out.println("Canceled.");
         }
     }
     
     @FXML void modifyProductsSaveButtonPushed(ActionEvent event) throws IOException {
-
+        //•  save modifications to the data and then redirect to the main screen
         String productName = modifyProductNameTextField.getText();
         String productInv = modifyProductLevelTextField.getText();
         String productPrice = modifyProductPCTextField.getText();
@@ -161,10 +164,8 @@ public class ModifyProductController implements Initializable {
             alert.showAndWait();
         }
     }
-    
-       
-    
-    
+
+    //•  cancel or exit out of this screen and go back to the main screen
     @FXML void modifyProductsCancelPushed(ActionEvent event) throws IOException {
 
         Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -188,6 +189,7 @@ public class ModifyProductController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        //•  modify or change data values
         Product products = getProductsInv().get(modifyProductIndex);
         productID = getProductsInv().get(modifyProductIndex).getprodID();
 
@@ -196,7 +198,7 @@ public class ModifyProductController implements Initializable {
         modifyProductLevelTextField.setText(Integer.toString(products.getprodLevel()));
         modifyProductMinTextField.setText(Integer.toString(products.getprodMin()));
         modifyProductMaxTextField.setText(Integer.toString(products.getprodMax()));
-        modifyProductIDTextField.setText("AutoGen:"+ productID);
+        modifyProductIDTextField.setText("Auto Gen:"+ productID);
         
         modifyProductIDColumn.setCellValueFactory(cellData -> cellData.getValue().partIDProperty().asObject());
         modifyProductNameColumn.setCellValueFactory(cellData -> cellData.getValue().partNameProperty());

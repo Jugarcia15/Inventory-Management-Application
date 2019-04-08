@@ -51,6 +51,7 @@ public class ModifyPartController implements Initializable {
     @FXML private TextField partMinTextField;
     @FXML private TextField partCompanyNameMachineIDTextField; 
     @FXML private Label partCompanyNameMachineIDLabel;
+    
     private ToggleGroup sourceToggleGroup;
     private boolean isPartOutsourced;
     int modifyPartIndex = ModifyPartInd();
@@ -59,6 +60,7 @@ public class ModifyPartController implements Initializable {
     
     @FXML void modifyProductSaveButtonPushed(ActionEvent event) throws IOException
     {
+        //•  save modifications to the data and then redirect to the main screen
         String partName = partNameTextField.getText();
         String partInv = partInvTextField.getText();
         String partPrice = partPCTextField.getText();
@@ -117,7 +119,7 @@ public class ModifyPartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+        //•  modify or change data values
         Part part = getPartsInv().get(modifyPartIndex);
         partID = getPartsInv().get(modifyPartIndex).getPartID();
         partIDTextField.setText("Part ID: " + partID);
@@ -138,7 +140,8 @@ public class ModifyPartController implements Initializable {
             partCompanyNameMachineIDLabel.setText("Company Name");
             OutsourcedRadioButton.setSelected(true);
         }
-    sourceToggleGroup = new ToggleGroup();
+        //•  select “In-House” or “Outsourced”
+        sourceToggleGroup = new ToggleGroup();
         this.InHouseRadioButton.setToggleGroup(sourceToggleGroup);
         this.OutsourcedRadioButton.setToggleGroup(sourceToggleGroup);   
     }    
@@ -154,11 +157,12 @@ public class ModifyPartController implements Initializable {
         partCompanyNameMachineIDLabel.setText("MachineID");
     }
     
+    //•  cancel or exit out of this screen and go back to the main screen
     @FXML void cancelButtonPushed(ActionEvent event)
     {
         Alert exit = new Alert(Alert.AlertType.CONFIRMATION);
         exit.initModality(Modality.NONE);
-        exit.setContentText("Are you sure you want to cancel" +partNameTextField.getText()+"?");
+        exit.setContentText("Are you sure you want to cancel " +partNameTextField.getText()+"?");
         Optional<ButtonType> Cancel = exit.showAndWait();
         if(Cancel.get() == ButtonType.OK)
                 {
@@ -168,7 +172,7 @@ public class ModifyPartController implements Initializable {
                 }
         else
         {
-            System.out.println("Cancel has been clicked.");
+            System.out.println("Canceled.");
         }
         
     }
